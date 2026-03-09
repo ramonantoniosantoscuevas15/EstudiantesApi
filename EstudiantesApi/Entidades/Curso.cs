@@ -2,7 +2,7 @@
 
 namespace EstudiantesApi.Entidades
 {
-    public class Cursos
+    public class Curso
     {
         public int Id { get; set; }
         [Required(ErrorMessage = "El nombre del curso es obligatorio.")]

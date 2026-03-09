@@ -9,14 +9,32 @@ namespace EstudiantesApi.Controllers
     public class CursosControllers
     {
         [HttpGet]
-        public List<Cursos> Get()
+        public List<Curso> Get()
         {
-            return new List<Cursos>
+            return new List<Curso>
             {
-                new Cursos { Id = 1, Nombre = "Matemáticas" },
-                new Cursos { Id = 2, Nombre = "Historia" },
-                new Cursos { Id = 3, Nombre = "Ciencias" }
+                new Curso { Id = 1, Nombre = "Matemáticas" },
+                new Curso { Id = 2, Nombre = "Historia" },
+                new Curso { Id = 3, Nombre = "Ciencias" }
             };
+        }
+
+        [HttpPost]
+        public ActionResult Post()
+        {
+            return new OkResult();
+        }
+
+        [HttpPut("{id}")]
+        public ActionResult Put(int id)
+        {
+            return new OkResult();
+        }
+
+        [HttpDelete]
+        public ActionResult Delete()
+        {
+            return new OkResult();
         }
     }
 }
