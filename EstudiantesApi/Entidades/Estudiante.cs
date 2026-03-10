@@ -4,24 +4,24 @@ namespace EstudiantesApi.Entidades
 {
     public class Estudiante
     {
-        int Id { get; set; }
-        [Required(ErrorMessage = "El nombre del estudiante es obligatorio.")]
-        [Range(2,60, ErrorMessage ="El campo{0} debe tener entre {1} y {2} caracteres")]
+        public int Id { get; set; }
+        [Required(ErrorMessage = "El campo{0} del estudiante es obligatorio.")]
+        [StringLength(10, ErrorMessage ="El campo{0} debe tener {1} caracteres o menos")]
         public required string  Nombre { get; set; } = null!;
-        [Required(ErrorMessage = "El apellido del estudiante es obligatorio.")]
-        [Range(2, 60, ErrorMessage = "El campo{0} debe tener entre {1} y {2} caracteres")]
+        [Required(ErrorMessage = "El campo{0} del estudiante es obligatorio.")]
+        [StringLength(10, ErrorMessage = "El campo{0} debe tener {1} caracteres o menos")]
         public required string Apellido { get; set; } = null!;
-        string? NombrePadre { get; set; }
-        string? NombreMadre { get; set; }
-        string? NombreTutor { get; set; }
+        public string? NombrePadre { get; set; }
+        public string? NombreMadre { get; set; }
+        public string? NombreTutor { get; set; }
         [Required(ErrorMessage = "El telefono obligatorio.")]
-        [Range(1000000000, 9999999999, ErrorMessage = "El campo {0} debe ser un número de teléfono válido de 10 dígitos.")]
+        [Phone( ErrorMessage = "El campo {0} debe ser un número de teléfono válido de 10 dígitos.")]
         public required double Telefono { get; set; }
-        [Required(ErrorMessage = "La dirección es obligatoria.")]
-        [Range(5, 100, ErrorMessage = "El campo {0} debe tener entre {1} y {2} caracteres.")]
+        [Required(ErrorMessage = "La campo{0} es obligatoria.")]
+        [StringLength(100, ErrorMessage = "El campo {0} debe tener {1} caracteres o menos")]
         public required string Direccion { get; set; } = null!;
-        string? Foto { get; set; } 
-        string? ActaNacimiento { get; set; }
+        public string? Foto { get; set; } 
+        public string? ActaNacimiento { get; set; }
 
 
 

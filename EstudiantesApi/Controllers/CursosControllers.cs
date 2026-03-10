@@ -1,14 +1,17 @@
 ﻿using EstudiantesApi.Entidades;
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
 
 namespace EstudiantesApi.Controllers
 {
     [Route("api/cursos")]
     [ApiController]
-    public class CursosControllers
+    
+    public class CursosControllers:ControllerBase
     {
         [HttpGet]
+        [OutputCache]
         public List<Curso> Get()
         {
             return new List<Curso>
@@ -20,12 +23,13 @@ namespace EstudiantesApi.Controllers
         }
 
         [HttpPost]
-        public ActionResult Post()
+        public ActionResult Post([FromBody] Curso curso)
         {
             return new OkResult();
         }
 
         [HttpPut("{id}")]
+        [OutputCache]
         public ActionResult Put(int id)
         {
             return new OkResult();
