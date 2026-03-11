@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace EstudiantesApi.Entidades
 {
@@ -19,8 +20,10 @@ namespace EstudiantesApi.Entidades
         public required double Telefono { get; set; }
         [Required(ErrorMessage = "La campo{0} es obligatoria.")]
         [StringLength(100, ErrorMessage = "El campo {0} debe tener {1} caracteres o menos")]
-        public required string Direccion { get; set; } = null!;
-        public string? Foto { get; set; } 
+        public required string Direccion { get; set; }
+        [Unicode(false)]
+        public string? Foto { get; set; }
+        [Unicode(false)]
         public string? ActaNacimiento { get; set; }
 
 

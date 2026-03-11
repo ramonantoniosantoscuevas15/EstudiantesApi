@@ -16,9 +16,9 @@ namespace EstudiantesApi.Controllers
         {
             return new List<Curso>
             {
-                new Curso { Id = 1, Nombre = "Matemáticas" },
-                new Curso { Id = 2, Nombre = "Historia" },
-                new Curso { Id = 3, Nombre = "Ciencias" }
+                new Curso { Id = 1, NombreCurso = "Matemáticas" },
+                new Curso { Id = 2, NombreCurso = "Historia" },
+                new Curso { Id = 3, NombreCurso = "Ciencias" }
             };
         }
 

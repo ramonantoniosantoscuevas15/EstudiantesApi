@@ -1,3 +1,4 @@
+using EstudiantesApi;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,7 +9,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(Program));
-
+builder.Services.AddDbContext<AplicationDBContext>(opciones => opciones.UseSqlServer("name=DefaultConnection"));
 builder.Services.AddOutputCache(opciones=> { 
     opciones.DefaultExpirationTimeSpan = TimeSpan.FromSeconds(30);
 });
