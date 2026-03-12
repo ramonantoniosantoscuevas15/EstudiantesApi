@@ -1,4 +1,5 @@
-﻿using EstudiantesApi.Entidades;
+﻿using AutoMapper;
+using EstudiantesApi.Entidades;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
 
@@ -9,6 +10,16 @@ namespace EstudiantesApi.Controllers
     
     public class EstudiantesControllers:ControllerBase
     {
+        private readonly IOutputCacheStore outputCacheStore;
+        private readonly AplicationDBContext context;
+        private readonly IMapper mapper;
+        private const string cachetag = "estudiantes";
+        public EstudiantesControllers(IOutputCacheStore outputCacheStore, AplicationDBContext context, IMapper mapper)
+        {
+            this.outputCacheStore = outputCacheStore;
+            this.context = context;
+            this.mapper = mapper;
+        }
         [HttpGet]
         [OutputCache]
         public ActionResult Get()
