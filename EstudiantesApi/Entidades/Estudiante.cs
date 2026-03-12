@@ -25,6 +25,7 @@ namespace EstudiantesApi.Entidades
         public string? Foto { get; set; }
         [Unicode(false)]
         public string? ActaNacimiento { get; set; }
+        public List<CursoEstudiante> cursoEstudiantes { get; set; } = new List<CursoEstudiante>();
 
 
 

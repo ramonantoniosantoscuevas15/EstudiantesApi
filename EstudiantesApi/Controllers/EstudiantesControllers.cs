@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EstudiantesApi.DTOs;
 using EstudiantesApi.Entidades;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
@@ -27,9 +28,10 @@ namespace EstudiantesApi.Controllers
             return new OkResult();
         }
         [HttpPost]
-        public ActionResult Post([FromBody] Estudiante estudiante)
+        public async Task<IActionResult> Post([FromForm] CrearEstudiantesdto crearEstudiantesdto)
         {
-            return new OkResult();
+            var estudiante = mapper.Map<Estudiante>(crearEstudiantesdto);
+
         }
         [HttpPut("{id}")]
         [OutputCache]
