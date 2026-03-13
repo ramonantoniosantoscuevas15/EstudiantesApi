@@ -23,6 +23,6 @@ namespace EstudiantesApi.DTOs
         
         public IFormFile? ActaNacimiento { get; set; }
 
-        public List<int>? cursoId { get; set; }
+        //public List<int>? cursoId { get; set; }
     }
 }
