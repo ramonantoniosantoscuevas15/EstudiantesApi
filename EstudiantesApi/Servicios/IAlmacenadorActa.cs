@@ -2,12 +2,12 @@
 {
     public interface IAlmacenadorActa
     {
-        Task<string> Almacenar(string contenedor, IFormFile archivo);
-        Task Borrar(string? ruta, string contenedor);
-        async Task<string> Editar(string? ruta, string contenedor, IFormFile archivo)
+        Task<string> AlmacenarActa(string contenedoracta, IFormFile archivo);
+        Task Borrar(string? rutaacta, string contenedoracta);
+        async Task<string> Editar(string? rutaacta, string contenedoracta, IFormFile archivo)
         {
-            await Borrar(ruta, contenedor);
-            return await Almacenar(contenedor, archivo);
+            await Borrar(rutaacta, contenedoracta);
+            return await AlmacenarActa(contenedoracta, archivo);
         }
     }
 }

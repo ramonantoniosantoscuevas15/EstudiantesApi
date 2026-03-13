@@ -1,4 +1,5 @@
 using EstudiantesApi;
+using EstudiantesApi.Servicios;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,6 +28,10 @@ builder.Services.AddCors(opciones => {
     });
 });
 
+builder.Services.AddTransient<IAlmacenadorFotos, Almacenadorfotoslocal>();
+builder.Services.AddTransient<IAlmacenadorActa, Almacenadoractaslocal>();
+builder.Services.AddHttpContextAccessor();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -35,6 +40,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseStaticFiles();
 
 app.UseCors();
 

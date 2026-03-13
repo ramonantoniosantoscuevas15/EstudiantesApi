@@ -20,6 +20,7 @@ namespace EstudiantesApi.Controllers
         private readonly IAlmacenadorFotos almacenadorFotos;
         private readonly IAlmacenadorActa almacenadorActa;
         private readonly string contenedor = "estudiantes";
+        private readonly string contenedoracta = "estudiantes";
         private const string cachetag = "estudiantes";
         public EstudiantesControllers(IOutputCacheStore outputCacheStore, 
             AplicationDBContext context, IMapper mapper, IAlmacenadorFotos almacenadorFotos,IAlmacenadorActa almacenadorActa)
@@ -51,7 +52,7 @@ namespace EstudiantesApi.Controllers
             }
             if(crearEstudiantesdto.ActaNacimiento is not null)
             {
-                var url = await almacenadorActa.Almacenar(contenedor,crearEstudiantesdto.ActaNacimiento);
+                var url = await almacenadorActa.AlmacenarActa(contenedoracta,crearEstudiantesdto.ActaNacimiento);
                 estudiante.ActaNacimiento = url;
             }
             context.Add(estudiante);
