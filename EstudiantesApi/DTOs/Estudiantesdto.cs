@@ -19,5 +19,9 @@ namespace EstudiantesApi.DTOs
         public string? Foto { get; set; }
 
         public string? ActaNacimiento { get; set; }
+
+        
+
+
     }
 }

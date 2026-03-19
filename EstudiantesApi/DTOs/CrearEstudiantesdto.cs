@@ -13,7 +13,7 @@ namespace EstudiantesApi.DTOs
         public string? NombreMadre { get; set; }
         public string? NombreTutor { get; set; }
         [Required]
-        [Phone]
+        
         public required double Telefono { get; set; }
         [Required]
         [StringLength(100)]
@@ -23,6 +23,6 @@ namespace EstudiantesApi.DTOs
         
         public IFormFile? ActaNacimiento { get; set; }
 
-        //public List<int>? cursoId { get; set; }
+        public List<int>? cursoId { get; set; }
     }
 }

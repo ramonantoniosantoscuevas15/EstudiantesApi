@@ -15,8 +15,7 @@ namespace EstudiantesApi.Entidades
         public string? NombrePadre { get; set; }
         public string? NombreMadre { get; set; }
         public string? NombreTutor { get; set; }
-        [Required(ErrorMessage = "El telefono obligatorio.")]
-        [Phone( ErrorMessage = "El campo {0} debe ser un número de teléfono válido de 10 dígitos.")]
+        
         public required double Telefono { get; set; }
         [Required(ErrorMessage = "La campo{0} es obligatoria.")]
         [StringLength(100, ErrorMessage = "El campo {0} debe tener {1} caracteres o menos")]
