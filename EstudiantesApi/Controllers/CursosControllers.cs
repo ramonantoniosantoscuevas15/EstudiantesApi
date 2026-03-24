@@ -6,7 +6,7 @@ using EstudiantesApi.Entidades;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.EntityFrameworkCore;
-
+using EstudiantesApi.Utilidades;
 namespace EstudiantesApi.Controllers
 {
     [Route("api/cursos")]
@@ -17,7 +17,7 @@ namespace EstudiantesApi.Controllers
         private readonly IOutputCacheStore outputCacheStore;
         private readonly AplicationDBContext context;
         private readonly IMapper mapper;
-        private const string cacheTag = "Cursos";
+        private const string cacheTag = "cursos";
 
         public CursosControllers(IOutputCacheStore outputCacheStore,AplicationDBContext context,IMapper mapper)
         {
@@ -38,6 +38,19 @@ namespace EstudiantesApi.Controllers
                 return NotFound();
             }   
             return curso;
+
+        }
+        [HttpGet]//api/cursos
+        [OutputCache(Tags = [cacheTag])]
+        public async Task<List<Cursodto>> Get([FromQuery] Paginaciondto paginacion)
+        {
+            var queryable = context.Cursos;
+            await HttpContext.InsertarParametrosPaginacionEncabecera(queryable);
+            return await queryable
+                .OrderBy(c => c.NombreCurso)
+                .Paginar(paginacion)
+                .ProjectTo<Cursodto>(mapper.ConfigurationProvider)
+                .ToListAsync();
 
         }
 
