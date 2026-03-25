@@ -66,16 +66,43 @@ namespace EstudiantesApi.Controllers
         }
 
         [HttpPut("{id}")]
-        [OutputCache]
-        public ActionResult Put(int id)
+        
+        public async Task <IActionResult>  Put(int id, [FromBody] CrearCursodto crearCurso)
         {
-            return new OkResult();
+            var cursosexistente = await context.Cursos.AnyAsync(c => c.Id == id);
+            if (!cursosexistente)
+            {
+                return NotFound();
+            }
+            var curso = mapper.Map<Curso>(crearCurso);
+            curso.Id = id;
+            context.Update(curso);
+            await context.SaveChangesAsync();
+            await outputCacheStore.EvictByTagAsync(cacheTag,default);
+            return NoContent();
+        }
+        [HttpGet("todos")]
+        [OutputCache(Tags = [cacheTag])]
+        public async Task<List<Cursodto>> Get()
+        {
+            return await context.Cursos
+                .OrderBy(c => c.NombreCurso)
+                .ProjectTo<Cursodto>(mapper.ConfigurationProvider).ToListAsync();
         }
 
-        [HttpDelete]
-        public ActionResult Delete()
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Delete(int id)
         {
-            return new OkResult();
+            var registrosBorrados = await context.Cursos
+                .Where(c=> c.Id == id)
+                .ExecuteDeleteAsync();
+            if (registrosBorrados ==0)
+            {
+                return NotFound();
+
+            }
+            await outputCacheStore.EvictByTagAsync(cacheTag,default);
+            return NoContent();
         }
     }
 }
