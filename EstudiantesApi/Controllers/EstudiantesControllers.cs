@@ -67,6 +67,36 @@ namespace EstudiantesApi.Controllers
         {
             return new OkResult();
         }
+        [HttpGet("PostCurso")]
+        public async Task<ActionResult<CursoPersonadto>> PostCurso()
+        {
+            var cursos = await context.Cursos
+                .ProjectTo<Cursodto>(mapper.ConfigurationProvider)
+                .ToListAsync();
+            return new CursoPersonadto { Cursos = cursos };
+
+        }
+        [HttpGet("Putget/{id:int}")]
+        public async Task<ActionResult<EstudiantePutgetdto>> Putget (int id)
+        {
+            var estudiante = await context.Estudiantes
+                .ProjectTo<Estudiantesdto>(mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync(e => e.Id == id);
+            if(estudiante == null)
+            {
+                NotFound();
+            }
+            var cursosSeleccionadosIds = estudiante!.Cursos.Select(c => c.Id).ToList();
+            var cursosNoSeleccionados = await context.Cursos.Where
+                (cs => !cursosSeleccionadosIds.Contains(cs.Id))
+                .ProjectTo<Cursodto>(mapper.ConfigurationProvider)
+                .ToListAsync();
+            var respuesta = new EstudiantePutgetdto();
+            respuesta.Estudiante = estudiante;
+            respuesta.cursoSeleccionado = estudiante.Cursos;
+            respuesta.cursoNoSeleccionado = cursosNoSeleccionados;
+            return respuesta;
+        }
         [HttpDelete]
         public ActionResult Delete()
         {

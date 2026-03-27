@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using EstudiantesApi.Utilidades;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
 namespace EstudiantesApi.DTOs
@@ -22,6 +24,7 @@ namespace EstudiantesApi.DTOs
         public IFormFile? Foto { get; set; }
         
         public IFormFile? ActaNacimiento { get; set; }
+        [ModelBinder(BinderType = typeof(TypeBinder))]
 
         public List<int>? cursoId { get; set; }
     }

@@ -20,7 +20,7 @@ namespace EstudiantesApi.DTOs
 
         public string? ActaNacimiento { get; set; }
 
-        
+        public List<Cursodto> Cursos { get; set; } = new List<Cursodto>();
 
 
     }
