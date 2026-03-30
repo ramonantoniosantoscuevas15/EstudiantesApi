@@ -58,7 +58,8 @@ namespace EstudiantesApi.Controllers
             context.Add(estudiante);
             await context.SaveChangesAsync();
             await outputCacheStore.EvictByTagAsync(cachetag,default);
-            return CreatedAtRoute("obtenerporid", new {id = estudiante.Id},estudiante);
+            var estudianteDto = mapper.Map<Estudiantesdto>(estudiante);
+            return CreatedAtRoute("obtenerporid", new {id = estudiante.Id},estudianteDto);
 
         }
         [HttpPut("{id}")]
@@ -68,12 +69,12 @@ namespace EstudiantesApi.Controllers
             return new OkResult();
         }
         [HttpGet("PostCurso")]
-        public async Task<ActionResult<CursoPersonadto>> PostCurso()
+        public async Task<ActionResult<CursoEstudiantedto>> PostCurso()
         {
             var cursos = await context.Cursos
                 .ProjectTo<Cursodto>(mapper.ConfigurationProvider)
                 .ToListAsync();
-            return new CursoPersonadto { Cursos = cursos };
+            return new CursoEstudiantedto { Cursos = cursos };
 
         }
         [HttpGet("Putget/{id:int}")]

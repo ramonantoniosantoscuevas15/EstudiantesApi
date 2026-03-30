@@ -20,6 +20,9 @@ namespace EstudiantesApi.Utilidades
             .ForMember(x => x.Foto, opciones => opciones.Ignore())
             .ForMember(x => x.ActaNacimiento, opciones => opciones.Ignore());
             CreateMap<Estudiante, Estudiantesdto>();
+            CreateMap<CursoEstudiante, Cursodto>()
+                .ForMember(c=> c.Id, ce=> ce.MapFrom(ce => ce.cursoId))
+                .ForMember(c => c.NombreCurso, ce => ce.MapFrom(ce => ce.curso.NombreCurso));
         }
         private void ConfigurarMappeoCursos()
         {

@@ -1,6 +1,6 @@
 ﻿namespace EstudiantesApi.DTOs
 {
-    public class CursoPersonadto
+    public class CursoEstudiantedto
     {
         public List<Cursodto> Cursos { get; set; } = new List<Cursodto>();
     }
