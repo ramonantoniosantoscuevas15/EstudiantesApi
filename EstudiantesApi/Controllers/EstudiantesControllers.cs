@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using EstudiantesApi.DTOs;
 using EstudiantesApi.Entidades;
 using EstudiantesApi.Servicios;
+using EstudiantesApi.Utilidades;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.EntityFrameworkCore;
@@ -38,8 +39,12 @@ namespace EstudiantesApi.Controllers
             var estudiante = await context.Estudiantes
                 .ProjectTo<Estudiantesdto>(mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(e => e.Id == id);
+            if(estudiante == null)
+            {
+                return NotFound();
+            }
 
-            return new OkResult();
+            return estudiante;
         }
         [HttpPost]
         public async Task<IActionResult> Post([FromForm] CrearEstudiantesdto crearEstudiantesdto)
@@ -62,11 +67,31 @@ namespace EstudiantesApi.Controllers
             return CreatedAtRoute("obtenerporid", new {id = estudiante.Id},estudianteDto);
 
         }
-        [HttpPut("{id}")]
-        [OutputCache]
-        public ActionResult Put(int id)
+        
+        [HttpPut("{id:int}")]
+        
+        public async Task<IActionResult>Put(int id,[FromForm] CrearEstudiantesdto estudiantesdto)
         {
-            return new OkResult();
+            var estudiante = await context.Estudiantes
+                .Include(e=> e.cursoEstudiantes)
+                .FirstOrDefaultAsync(e => e.Id == id);
+            if(estudiante == null)
+            {
+                return NotFound();
+            }
+            estudiante = mapper.Map(estudiantesdto,estudiante);
+            if(estudiantesdto.Foto is not null)
+            {
+                estudiante.Foto = await almacenadorFotos.Editar(estudiante.Foto, contenedor, estudiantesdto.Foto);
+            }
+            if(estudiantesdto.ActaNacimiento is not null)
+            {
+                estudiante.ActaNacimiento = await almacenadorActa.Editar(estudiante.ActaNacimiento, contenedoracta, estudiantesdto.ActaNacimiento);
+            }
+
+            await context.SaveChangesAsync();
+            await outputCacheStore.EvictByTagAsync(cachetag,default);
+            return NoContent();
         }
         [HttpGet("PostCurso")]
         public async Task<ActionResult<CursoEstudiantedto>> PostCurso()
@@ -98,11 +123,38 @@ namespace EstudiantesApi.Controllers
             respuesta.cursoNoSeleccionado = cursosNoSeleccionados;
             return respuesta;
         }
-        [HttpDelete]
-        public ActionResult Delete()
+        [HttpDelete("{id:int}")]
+        public async Task <IActionResult> Delete(int id)
         {
-            return new OkResult();
+            var registrosborrados = await context.Estudiantes.Where(e => e.Id == id).ExecuteDeleteAsync();
+            if(registrosborrados == 0)
+            {
+                return NotFound();
+            }
+            await outputCacheStore.EvictByTagAsync(cachetag,default);
+            return NoContent();
+        }
+        [HttpGet] //api/estudiantes/lista
+        [OutputCache(Tags = [cachetag])]
+        public async Task<List<Estudiantesdto>> Get([FromQuery] Paginaciondto paginacion)
+        {
+            var queryable = context.Estudiantes;
+            await HttpContext.InsertarParametrosPaginacionEncabecera(queryable);
+            return await queryable
+                .Where(e =>e.cursoEstudiantes.Select(ce=> ce.estudianteId).Contains(e.Id))
+                .OrderBy(e => e.Nombre)
+                .Paginar(paginacion)
+                .ProjectTo<Estudiantesdto>(mapper.ConfigurationProvider).ToListAsync();
+        }
+        [HttpGet("todos")]
+        [OutputCache(Tags = [cachetag])]
+        public async Task<List<Estudiantesdto>> Get()
+        {
+            return await context.Estudiantes
+                .OrderBy(e => e.Nombre)
+                .ProjectTo<Estudiantesdto>(mapper.ConfigurationProvider).ToListAsync();
         }
 
     }
+
 }
