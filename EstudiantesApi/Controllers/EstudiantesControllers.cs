@@ -155,6 +155,26 @@ namespace EstudiantesApi.Controllers
                 .ProjectTo<Estudiantesdto>(mapper.ConfigurationProvider).ToListAsync();
         }
 
+        [HttpGet("buscar")]
+        [OutputCache(Tags = [cachetag])]
+        public async Task<List<Estudiantesdto>> Buscar([FromQuery] EstudiantesFiltrodto estudiantesFiltrodto)
+        {
+            var estudiantesQueryable = context.Estudiantes.AsQueryable();
+            if(!string.IsNullOrEmpty(estudiantesFiltrodto.Nombre))
+            {
+                estudiantesQueryable = estudiantesQueryable.Where(e => e.Nombre.Contains(estudiantesFiltrodto.Nombre));
+            }
+            if(estudiantesFiltrodto.CursoId != 0)
+            {
+                estudiantesQueryable = estudiantesQueryable.Where(e =>e.cursoEstudiantes.Select(ce => ce.cursoId).Contains(estudiantesFiltrodto.CursoId));
+
+            }
+            await HttpContext.InsertarParametrosPaginacionEncabecera(estudiantesQueryable);
+            var estudiante = await estudiantesQueryable.Paginar(estudiantesFiltrodto.Paginacion)
+                .ProjectTo<Estudiantesdto>(mapper.ConfigurationProvider).ToListAsync();
+            return estudiante;
+        }
+
     }
 
 }
