@@ -1,15 +1,17 @@
 ﻿using EstudiantesApi.Entidades;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace EstudiantesApi
 {
-    public class AplicationDBContext : DbContext
+    public class AplicationDBContext : IdentityDbContext
     {
         public AplicationDBContext(DbContextOptions options) : base(options)
         {
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<CursoEstudiante>().HasKey(ce=> new { ce.cursoId, ce.estudianteId });
         }
 

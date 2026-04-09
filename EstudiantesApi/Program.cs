@@ -1,6 +1,9 @@
 using EstudiantesApi;
 using EstudiantesApi.Servicios;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +12,26 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddIdentityCore<IdentityUser>()
+    .AddEntityFrameworkStores<AplicationDBContext>()
+    .AddDefaultTokenProviders();
+builder.Services.AddScoped<UserManager<IdentityUser>>();
+builder.Services.AddScoped<SignInManager<IdentityUser>>();
+builder.Services.AddAuthentication().AddJwtBearer(opciones =>
+{
+    opciones.MapInboundClaims = false;
+    opciones.TokenValidationParameters = new
+    TokenValidationParameters
+    {
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["llavejwt"]!)),
+        ClockSkew = TimeSpan.Zero
+
+    };
+});
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddDbContext<AplicationDBContext>(opciones => opciones.UseSqlServer("name=DefaultConnection"));
 builder.Services.AddOutputCache(opciones=> { 
