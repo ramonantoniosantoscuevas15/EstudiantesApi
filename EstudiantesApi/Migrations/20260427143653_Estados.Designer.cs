@@ -4,6 +4,7 @@ using EstudiantesApi;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EstudiantesApi.Migrations
 {
     [DbContext(typeof(AplicationDBContext))]
-    partial class AplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20260427143653_Estados")]
+    partial class Estados
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -53,29 +56,6 @@ namespace EstudiantesApi.Migrations
                     b.HasIndex("estudianteId");
 
                     b.ToTable("CursoEstudiantes");
-                });
-
-            modelBuilder.Entity("EstudiantesApi.Entidades.Doctor", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Especialidad")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Nombre")
-                        .IsRequired()
-                        .HasMaxLength(25)
-                        .HasColumnType("nvarchar(25)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Dotores");
                 });
 
             modelBuilder.Entity("EstudiantesApi.Entidades.Estado", b =>
@@ -160,146 +140,6 @@ namespace EstudiantesApi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Generos");
-                });
-
-            modelBuilder.Entity("EstudiantesApi.Entidades.Hospital", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Nombre")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Hospitales");
-                });
-
-            modelBuilder.Entity("EstudiantesApi.Entidades.Paciente", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Alegias")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<int>("Cedula")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Correo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Direccion")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
-
-                    b.Property<DateTime>("FechaNacimiento")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Nombre")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<string>("NombreContacto")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("NotasMedicas")
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
-
-                    b.Property<double>("Telefono")
-                        .HasColumnType("float");
-
-                    b.Property<double>("TelefonoContacto")
-                        .HasColumnType("float");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Pacientes");
-                });
-
-            modelBuilder.Entity("EstudiantesApi.Entidades.PacienteDoctor", b =>
-                {
-                    b.Property<int>("PacienteId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("DoctorId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("DoctorAsignado")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("PacienteId", "DoctorId");
-
-                    b.HasIndex("DoctorId");
-
-                    b.ToTable("PacienteDoctores");
-                });
-
-            modelBuilder.Entity("EstudiantesApi.Entidades.PacienteEstado", b =>
-                {
-                    b.Property<int>("PacienteId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("EstadoId")
-                        .HasColumnType("int");
-
-                    b.HasKey("PacienteId", "EstadoId");
-
-                    b.HasIndex("EstadoId");
-
-                    b.ToTable("PacienteEstados");
-                });
-
-            modelBuilder.Entity("EstudiantesApi.Entidades.PacienteGenero", b =>
-                {
-                    b.Property<int>("PacienteId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("GeneroId")
-                        .HasColumnType("int");
-
-                    b.HasKey("PacienteId", "GeneroId");
-
-                    b.HasIndex("GeneroId");
-
-                    b.ToTable("PacienteGeneros");
-                });
-
-            modelBuilder.Entity("EstudiantesApi.Entidades.PacienteHospital", b =>
-                {
-                    b.Property<int>("PacienteId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("HospitalId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CentroMedico")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("PacienteId", "HospitalId");
-
-                    b.HasIndex("HospitalId");
-
-                    b.ToTable("PacienteHospitales");
                 });
 
             modelBuilder.Entity("EstudiantesApi.Entidades.Sangre", b =>
@@ -537,80 +377,6 @@ namespace EstudiantesApi.Migrations
                     b.Navigation("estudiante");
                 });
 
-            modelBuilder.Entity("EstudiantesApi.Entidades.PacienteDoctor", b =>
-                {
-                    b.HasOne("EstudiantesApi.Entidades.Doctor", "Doctor")
-                        .WithMany()
-                        .HasForeignKey("DoctorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("EstudiantesApi.Entidades.Paciente", null)
-                        .WithMany("PacienteDoctores")
-                        .HasForeignKey("PacienteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Doctor");
-                });
-
-            modelBuilder.Entity("EstudiantesApi.Entidades.PacienteEstado", b =>
-                {
-                    b.HasOne("EstudiantesApi.Entidades.Estado", "Estado")
-                        .WithMany()
-                        .HasForeignKey("EstadoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("EstudiantesApi.Entidades.Paciente", "Paciente")
-                        .WithMany("PacienteEstados")
-                        .HasForeignKey("PacienteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Estado");
-
-                    b.Navigation("Paciente");
-                });
-
-            modelBuilder.Entity("EstudiantesApi.Entidades.PacienteGenero", b =>
-                {
-                    b.HasOne("EstudiantesApi.Entidades.Genero", "Genero")
-                        .WithMany()
-                        .HasForeignKey("GeneroId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("EstudiantesApi.Entidades.Paciente", "Paciente")
-                        .WithMany("PacienteGeneros")
-                        .HasForeignKey("PacienteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Genero");
-
-                    b.Navigation("Paciente");
-                });
-
-            modelBuilder.Entity("EstudiantesApi.Entidades.PacienteHospital", b =>
-                {
-                    b.HasOne("EstudiantesApi.Entidades.Hospital", "Hospital")
-                        .WithMany()
-                        .HasForeignKey("HospitalId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("EstudiantesApi.Entidades.Paciente", "paciente")
-                        .WithMany("PacienteHospitales")
-                        .HasForeignKey("PacienteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Hospital");
-
-                    b.Navigation("paciente");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -670,17 +436,6 @@ namespace EstudiantesApi.Migrations
             modelBuilder.Entity("EstudiantesApi.Entidades.Estudiante", b =>
                 {
                     b.Navigation("cursoEstudiantes");
-                });
-
-            modelBuilder.Entity("EstudiantesApi.Entidades.Paciente", b =>
-                {
-                    b.Navigation("PacienteDoctores");
-
-                    b.Navigation("PacienteEstados");
-
-                    b.Navigation("PacienteGeneros");
-
-                    b.Navigation("PacienteHospitales");
                 });
 #pragma warning restore 612, 618
         }
