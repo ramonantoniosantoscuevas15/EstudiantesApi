@@ -6,10 +6,15 @@ namespace EstudiantesApi.Utilidades
 {
     public class AutoMapperProfiles : Profile
     {
-        public AutoMapperProfiles() 
+        public AutoMapperProfiles()
         {
             ConfigurarMappeoEstudiante();
             ConfigurarMappeoCursos();
+            ConfigurarMappeoGeneros();
+            ConfigurarMappeoEstados();
+            ConfigurarMappeoSangre();
+            ConfigurarMappeoDoctores();
+
 
         }
         private void ConfigurarMappeoEstudiante()
@@ -19,7 +24,7 @@ namespace EstudiantesApi.Utilidades
             , dto => dto.MapFrom(ce => ce.cursoId!.Select(id => new CursoEstudiante { cursoId = id })))
             .ForMember(x => x.Foto, opciones => opciones.Ignore())
             .ForMember(x => x.ActaNacimiento, opciones => opciones.Ignore());
-            
+
             CreateMap<Estudiante, Estudiantesdto>()
                 .ForMember(entidad => entidad.Cursos, dto =>
                 dto.MapFrom(dto => dto.cursoEstudiantes));
@@ -29,8 +34,28 @@ namespace EstudiantesApi.Utilidades
         }
         private void ConfigurarMappeoCursos()
         {
-            CreateMap<CrearCursodto,Curso>();
-             CreateMap<Curso, Cursodto>();  
+            CreateMap<CrearCursodto, Curso>();
+            CreateMap<Curso, Cursodto>();
+        }
+        private void ConfigurarMappeoGeneros()
+        {
+            CreateMap<CrearGenerodto, Genero>();
+            CreateMap<Genero, Generodto>();
+        }
+        private void ConfigurarMappeoEstados()
+        {
+            CreateMap<CrearEstadodto, Estado>();
+            CreateMap<Estado, Estadodto>();
+        }
+        private void ConfigurarMappeoSangre()
+        {
+            CreateMap<CrearSangredto, Sangre>();
+            CreateMap<Sangre, Sangredto>();
+        }
+        private void ConfigurarMappeoDoctores()
+        {
+            CreateMap<CrearDoctordto, Doctor>();
+            CreateMap<Doctor, Doctordto>();
         }
     }
 }

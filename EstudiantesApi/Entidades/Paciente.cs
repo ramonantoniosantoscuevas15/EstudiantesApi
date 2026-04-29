@@ -23,7 +23,8 @@ namespace EstudiantesApi.Entidades
         public required double TelefonoContacto { get; set; }
         public List<PacienteGenero> PacienteGeneros { get; set; } = new List<PacienteGenero>();
         public List<PacienteEstado> PacienteEstados { get; set; } = new List<PacienteEstado>();
-        public List<PacienteDoctor> PacienteDoctores { get; set; } = new List<PacienteDoctor>();
-        public List<PacienteHospital> PacienteHospitales { get; set; } = new List<PacienteHospital>();
+        public List<PacienteSangre> PacienteSangres { get; set; } = new List<PacienteSangre>();
+        public List<DoctorPaciente> DoctorPacientes { get; set; } = new List<DoctorPaciente>();
+        public List<HospitalPaciente> HospitalPacientes { get; set; } = new List<HospitalPaciente>();
     }
 }

@@ -4,6 +4,7 @@ using EstudiantesApi;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EstudiantesApi.Migrations
 {
     [DbContext(typeof(AplicationDBContext))]
-    partial class AplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20260428192125_DoctorPaciente")]
+    partial class DoctorPaciente
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -193,21 +196,6 @@ namespace EstudiantesApi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Hospitales");
-                });
-
-            modelBuilder.Entity("EstudiantesApi.Entidades.HospitalPaciente", b =>
-                {
-                    b.Property<int>("HospitalId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PacienteId")
-                        .HasColumnType("int");
-
-                    b.HasKey("HospitalId", "PacienteId");
-
-                    b.HasIndex("PacienteId");
-
-                    b.ToTable("HospitalPacientes");
                 });
 
             modelBuilder.Entity("EstudiantesApi.Entidades.Paciente", b =>
@@ -584,25 +572,6 @@ namespace EstudiantesApi.Migrations
                     b.Navigation("Doctor");
 
                     b.Navigation("Paciente");
-                });
-
-            modelBuilder.Entity("EstudiantesApi.Entidades.HospitalPaciente", b =>
-                {
-                    b.HasOne("EstudiantesApi.Entidades.Hospital", "Hospital")
-                        .WithMany()
-                        .HasForeignKey("HospitalId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("EstudiantesApi.Entidades.Paciente", "paciente")
-                        .WithMany()
-                        .HasForeignKey("PacienteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Hospital");
-
-                    b.Navigation("paciente");
                 });
 
             modelBuilder.Entity("EstudiantesApi.Entidades.PacienteDoctor", b =>
