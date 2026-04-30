@@ -2,9 +2,9 @@
 
 namespace EstudiantesApi.DTOs
 {
-    public class CrearHospitaldto
+    public class Hospitaldto
     {
-       
+        public int Id { get; set; }
         public required string Nombre { get; set; }
     }
 }

@@ -1,0 +1,100 @@
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using EstudiantesApi.DTOs;
+using EstudiantesApi.Entidades;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
+using Microsoft.EntityFrameworkCore;
+
+namespace EstudiantesApi.Controllers
+{
+    [Route("api/pacientes")]
+    [ApiController]
+    public class PacienteController: ControllerBase
+    {
+        private readonly IOutputCacheStore outputCacheStore;
+        private readonly AplicationDBContext context;
+        private readonly IMapper mapper;
+        private const string cacheTag = "pacientes";
+
+        public PacienteController(IOutputCacheStore outputCacheStore, AplicationDBContext context, IMapper mapper)
+        {
+            this.outputCacheStore = outputCacheStore;
+            this.context = context;
+            this.mapper = mapper;
+        }
+        [HttpGet("{id:int}", Name = "obtenerpacienteporid")]
+        [OutputCache(Tags = [cacheTag])]
+        public async Task<ActionResult<PacienteDetalledto>> Get(int id)
+        {
+            var paciente = await context.Pacientes
+                .ProjectTo<PacienteDetalledto>(mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync(x => x.Id == id);
+            if(paciente == null)
+            {
+                return NotFound();
+            }
+            return paciente;
+        }
+        [HttpGet("PosGet")]
+        public async Task<ActionResult<PacientesPostGetdto>> PosGet()
+        {
+            var generos = await context.Generos.ProjectTo<Generodto>(mapper.ConfigurationProvider).ToListAsync();
+            var estados = await context.Estados.ProjectTo<Estadodto>(mapper.ConfigurationProvider).ToListAsync();
+            var sangres = await context.Sangres.ProjectTo<Sangredto>(mapper.ConfigurationProvider).ToListAsync();
+            
+            return new PacientesPostGetdto() { Generos = generos, Estados = estados, Sangres = sangres };
+        }
+        [HttpPost]
+        public async Task<IActionResult> Post([FromForm] Crearpacientedto crearpaciente)
+        {
+            var paciente = mapper.Map<Paciente>(crearpaciente);
+            context.Add(paciente);
+            await context.SaveChangesAsync();
+            await outputCacheStore.EvictByTagAsync(cacheTag,default);
+            var pacientedto = mapper.Map<Pacientedto>(paciente);
+            return CreatedAtRoute("obtenerpacienteporid", new { id = paciente.Id }, pacientedto);
+        }
+        [HttpGet("PutGet/{id:int}")] 
+        public async Task<ActionResult<PacientesPutGetdto>> PutGet(int id)
+        {
+            var pacienteActionResult = await Get(id);
+            if(pacienteActionResult.Result is NotFoundResult)
+            {
+                return NotFound();
+            }
+            var paciente = pacienteActionResult.Value;
+            var generosSeleccionadosIds = paciente!.Generos.Select(g=> g.Id).ToList();
+            var generosNoSeleccionados = await context.Generos.Where(
+                g=> !generosSeleccionadosIds.Contains(g.Id))
+                .ProjectTo<Generodto>(mapper.ConfigurationProvider)
+                .ToListAsync();
+            var estadosSeleccionadosIds = paciente.Estados.Select(e => e.Id).ToList();
+            var estadosNoSeleccionados = await context.Estados.Where(
+                e => !estadosSeleccionadosIds.Contains(e.Id))
+                .ProjectTo<Estadodto>(mapper.ConfigurationProvider)
+                .ToListAsync();
+            var sangresSeleccionadosIds = paciente.Sangres.Select(s => s.Id).ToList();
+            var sangresNoSeleccionados = await context.Sangres.Where(
+                s => !sangresSeleccionadosIds.Contains(s.Id))
+                .ProjectTo<Sangredto>(mapper.ConfigurationProvider)
+                .ToListAsync();
+            var generosNoSeleccionadosdto = mapper.Map<List<Generodto>>(generosNoSeleccionados);
+            var estadosNoSeleccionadosdto = mapper.Map<List<Estadodto>>(estadosNoSeleccionados);
+            var sangresNoSeleccionadosdto = mapper.Map<List<Sangredto>>(sangresNoSeleccionados);
+            var respuesta = new PacientesPutGetdto();
+            respuesta.Paciente = paciente;
+            respuesta.GeneroSeleccionado = paciente.Generos;
+            respuesta.GeneroNoSeleccionado = generosNoSeleccionadosdto;
+            respuesta.EstadoSeleccionado = paciente.Estados;
+            respuesta.EstadoNoSeleccionado = estadosNoSeleccionadosdto;
+            respuesta.SangreSeleccionado = paciente.Sangres;
+            respuesta.SangreNoSeleccionado = sangresNoSeleccionadosdto;
+             
+            
+            return respuesta;
+        }
+
+
+    }
+}
