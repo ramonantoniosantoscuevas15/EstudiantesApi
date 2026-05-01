@@ -7,5 +7,6 @@ namespace EstudiantesApi.DTOs
     public class CrearDoctorPacientedto
     {
         public int Id { get; set; }
+        
     }
 }

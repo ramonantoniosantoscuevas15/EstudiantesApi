@@ -58,12 +58,13 @@ namespace EstudiantesApi.Controllers
         [HttpGet("PutGet/{id:int}")] 
         public async Task<ActionResult<PacientesPutGetdto>> PutGet(int id)
         {
-            var pacienteActionResult = await Get(id);
-            if(pacienteActionResult.Result is NotFoundResult)
+            var paciente = await context.Pacientes
+                .ProjectTo<PacienteDetalledto>(mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync(x => x.Id == id);  
+            if(paciente == null)
             {
                 return NotFound();
             }
-            var paciente = pacienteActionResult.Value;
             var generosSeleccionadosIds = paciente!.Generos.Select(g=> g.Id).ToList();
             var generosNoSeleccionados = await context.Generos.Where(
                 g=> !generosSeleccionadosIds.Contains(g.Id))
@@ -90,9 +91,40 @@ namespace EstudiantesApi.Controllers
             respuesta.EstadoNoSeleccionado = estadosNoSeleccionadosdto;
             respuesta.SangreSeleccionado = paciente.Sangres;
             respuesta.SangreNoSeleccionado = sangresNoSeleccionadosdto;
-             
-            
+            respuesta.Dotores = paciente.Doctores;
+            respuesta.Hospitales = paciente.Hospitales;
             return respuesta;
+        }
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> Put(int id, [FromForm] Crearpacientedto crearpacientedto)
+        {
+            var paciente = await context.Pacientes
+                .Include(p => p.DoctorPacientes)
+                .Include(p=> p.HospitalPacientes)
+                .Include(p=> p.PacienteGeneros)
+                .Include(p=> p.PacienteEstados)
+                .Include(p=> p.PacienteSangres)
+                .FirstOrDefaultAsync();
+            if(paciente == null)
+            {
+                return NotFound();
+            }
+            paciente = mapper.Map(crearpacientedto, paciente);
+            await context.SaveChangesAsync();
+            await outputCacheStore.EvictByTagAsync(cacheTag, default);
+            return NoContent();
+
+        }
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var registrosborrados = await context.Pacientes.Where(e => e.Id == id).ExecuteDeleteAsync();
+            if (registrosborrados == 0)
+            {
+                return NotFound();
+            }
+            await outputCacheStore.EvictByTagAsync(cacheTag, default);
+            return NoContent();
         }
 
 
