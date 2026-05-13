@@ -58,11 +58,13 @@ namespace EstudiantesApi.Utilidades
         {
             CreateMap<CrearDoctordto, Doctor>();
             CreateMap<Doctor, Doctordto>();
+            CreateMap<Doctor, PacienteDoctordto>();
         }
         private void ConfigurarMappeoHospitales()
         {
             CreateMap<CrearHospitaldto, Hospital>();
             CreateMap<Hospital, Hospitaldto>();
+            CreateMap<Hospital, PacienteHospitaldto>();
         }
         private void ConfigurarMappeoPacientes()
         {
@@ -70,7 +72,7 @@ namespace EstudiantesApi.Utilidades
                 .ForMember(x => x.PacienteGeneros, dto => dto.MapFrom(pg => pg.GeneroId!.Select(id => new PacienteGenero { GeneroId = id})))
                 .ForMember(x => x.PacienteEstados, dto => dto.MapFrom(pe => pe.EstadoId!.Select(id => new PacienteEstado { EstadoId = id })))
                 .ForMember(x => x.PacienteSangres, dto => dto.MapFrom(ps => ps.SangreId!.Select(id => new PacienteSangre { SangreId = id })))
-                .ForMember(x => x.DoctorPacientes, dto => dto.MapFrom(dp => dp.Doctores!.Select(doctor => new DoctorPaciente { DoctorId = doctor.Id })))
+                .ForMember(x => x.DoctorPacientes, dto => dto.MapFrom(dp => dp.Doctores!.Select(doctor => new DoctorPaciente { DoctorId = doctor.Id})))
                 .ForMember(x => x.HospitalPacientes, dto => dto.MapFrom(hp => hp.Hospitales!.Select(hospital => new HospitalPaciente { HospitalId = hospital.Id })));
             CreateMap<Paciente, Pacientedto>();
 

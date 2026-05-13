@@ -21,6 +21,7 @@ namespace EstudiantesApi
             modelBuilder.Entity<PacienteHospital>().HasKey(ph => new { ph.PacienteId, ph.HospitalId });
             modelBuilder.Entity<DoctorPaciente>().HasKey(dp => new { dp.DoctorId, dp.PacienteId });
             modelBuilder.Entity<HospitalPaciente>().HasKey(hp => new { hp.HospitalId, hp.PacienteId });
+            modelBuilder.Entity<PacienteSangre>().HasKey(ps => new { ps.PacienteId, ps.SangreId });
         }
 
         public DbSet<Curso>Cursos { get; set; }
@@ -38,6 +39,8 @@ namespace EstudiantesApi
         public DbSet<PacienteHospital> PacienteHospitales { get; set; }
         public DbSet<DoctorPaciente> DoctorPacientes { get; set; }
         public DbSet<HospitalPaciente> HospitalPacientes { get; set; }
+        public DbSet<PacienteSangre> PacienteSangres { get; set; }
+
 
         protected AplicationDBContext()
         {

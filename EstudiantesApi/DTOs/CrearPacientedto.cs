@@ -29,9 +29,9 @@ namespace EstudiantesApi.DTOs
         [ModelBinder(BinderType = typeof(TypeBinder))]
         public List<int>? SangreId { get; set; }
         [ModelBinder(BinderType = typeof(TypeBinder))]
-        public List<CrearDoctorPacientedto> Doctores { get; set; } = new List<CrearDoctorPacientedto>();
+        public List<CrearDoctorPacientedto>? Doctores { get; set; } 
         [ModelBinder(BinderType = typeof(TypeBinder))]
-        public List<CrearHospitalPacientedto> Hospitales { get; set; } = new List<CrearHospitalPacientedto>();
+        public List<CrearHospitalPacientedto>? Hospitales { get; set; } 
 
 
     }

@@ -60,6 +60,13 @@ namespace EstudiantesApi.Controllers
             await outputCacheStore.EvictByTagAsync(cacheTag, default);
             return NoContent();
         }
+        [HttpGet("{nombre}")]
+        public async Task<ActionResult<List<PacienteDoctordto>>> Get(string nombre)
+        {
+            return await context.Dotores.Where(d => d.Nombre.Contains(nombre))
+                .ProjectTo<PacienteDoctordto>(mapper.ConfigurationProvider)
+                .ToListAsync(); 
+        }
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
